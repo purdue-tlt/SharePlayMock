@@ -8,7 +8,7 @@
 import Foundation
 import GroupActivities
 
-@available(iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
 public class ParticipantMock : Hashable, Identifiable {
     
     public typealias ID = UUID

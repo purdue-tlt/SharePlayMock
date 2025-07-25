@@ -8,7 +8,7 @@
 import Foundation
 import GroupActivities
 
-@available(iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
 public protocol GroupActivityMock : Decodable, Encodable {
     
     associatedtype ActivityType: GroupActivity
@@ -16,7 +16,7 @@ public protocol GroupActivityMock : Decodable, Encodable {
     var groupActivity: ActivityType { get }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
 extension GroupActivityMock {
     
     public typealias Sessions = GroupSessionMock<Self>.Sessions
@@ -31,7 +31,7 @@ extension GroupActivityMock {
     }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
 extension GroupActivityMock {
     
     public func prepareForActivation() async -> GroupActivityActivationResult {
@@ -54,7 +54,7 @@ extension GroupActivityMock {
     }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
 extension GroupActivityMock {
     func onSessionDetected(_ sessionId: UUID) {
         if Self.sessions().current?.id == sessionId {
@@ -100,7 +100,7 @@ extension GroupActivityMock {
     }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
 extension SharePlayMockManager {
     
     func activate<T: GroupActivityMock>(activity: T) {
@@ -133,7 +133,7 @@ extension SharePlayMockManager {
     }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
 struct ActivityCodec {
     static func encode(_ activity: any GroupActivityMock) -> String {
         let encoder = JSONEncoder()
