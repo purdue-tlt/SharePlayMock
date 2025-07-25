@@ -9,8 +9,12 @@ import Foundation
 import GroupActivities
 import Combine
 
-@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
-final public class GroupSessionMock<M: GroupActivityMock> : ObservableObject {
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
+final public class GroupSessionMock<M: GroupActivityMock> : ObservableObject, @unchecked Sendable {
     
     public typealias ActivityType = M.ActivityType
     
@@ -104,7 +108,11 @@ final public class GroupSessionMock<M: GroupActivityMock> : ObservableObject {
 }
 
 
-@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 extension GroupSessionMock {
     
     public struct Sessions : AsyncSequence {
@@ -154,8 +162,10 @@ extension GroupSessionMock {
                 self.iterator = iterator
                 if iterator == nil {
                     stream = AsyncStream<Element> {continuation in
-                        submitHandler = { task in
-                            continuation.yield(task)
+                        submitHandler = { element in
+                            Task { @MainActor in
+                                continuation.yield(element)
+                            }
                         }
                         stopHandler = {
                             continuation.finish()
@@ -206,7 +216,11 @@ enum SessionError: Error {
     case end(String)
 }
 
-@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 extension SharePlayMockManager {
     
     func join<T: GroupActivityMock>(session: GroupSessionMock<T>) {

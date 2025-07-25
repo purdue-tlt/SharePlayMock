@@ -8,7 +8,11 @@
 import Foundation
 import GroupActivities
 
-@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 public protocol GroupActivityMock : Decodable, Encodable {
     
     associatedtype ActivityType: GroupActivity
@@ -16,7 +20,11 @@ public protocol GroupActivityMock : Decodable, Encodable {
     var groupActivity: ActivityType { get }
 }
 
-@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 extension GroupActivityMock {
     
     public typealias Sessions = GroupSessionMock<Self>.Sessions
@@ -31,7 +39,11 @@ extension GroupActivityMock {
     }
 }
 
-@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 extension GroupActivityMock {
     
     public func prepareForActivation() async -> GroupActivityActivationResult {
@@ -54,7 +66,11 @@ extension GroupActivityMock {
     }
 }
 
-@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 extension GroupActivityMock {
     func onSessionDetected(_ sessionId: UUID) {
         if Self.sessions().current?.id == sessionId {
@@ -100,7 +116,11 @@ extension GroupActivityMock {
     }
 }
 
-@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 extension SharePlayMockManager {
     
     func activate<T: GroupActivityMock>(activity: T) {
@@ -133,7 +153,11 @@ extension SharePlayMockManager {
     }
 }
 
-@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 struct ActivityCodec {
     static func encode(_ activity: any GroupActivityMock) -> String {
         let encoder = JSONEncoder()

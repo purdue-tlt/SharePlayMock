@@ -8,7 +8,11 @@
 import Foundation
 import GroupActivities
 
-@available(iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 public class GroupSessionMessengerMock {
     
     private var activityIdentifier: String
@@ -61,12 +65,16 @@ public class GroupSessionMessengerMock {
     }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, *)
-class MessageReceiverRegistry {
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
+class MessageReceiverRegistry: @unchecked Sendable {
     
     static let instance = MessageReceiverRegistry()
     
-    var map: [String: MessageReceiver] = [:]
+    private var map: [String: MessageReceiver] = [:]
     private let lock = NSLock()
     
     func get<Message: Codable>(activityIdentifier: String, of type: Message.Type) -> GroupSessionMessengerMock.Messages<Message> {
@@ -92,23 +100,35 @@ class MessageReceiverRegistry {
     }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 protocol MessageReceiver {
     func receive(message: String, participant: ParticipantMock)
 }
 
-@available(iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 extension GroupSessionMessengerMock {
 
-    public struct MockMessageContext {
+    public struct MockMessageContext : @unchecked Sendable {
         public var source: ParticipantMock
     }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 extension GroupSessionMessengerMock {
     
-    public struct Messages<Message> : AsyncSequence, MessageReceiver where Message : Codable {
+    public struct Messages<Message: Sendable> : AsyncSequence, MessageReceiver where Message : Codable {
         
         public typealias Element = (Message, MockMessageContext)
 
@@ -146,8 +166,10 @@ extension GroupSessionMessengerMock {
                 self.iterator = iterator
                 if iterator == nil {
                     stream = AsyncStream<Element> {continuation in
-                        submitHandler = { task in
-                            continuation.yield(task)
+                        submitHandler = { element in
+                            Task { @MainActor in
+                                continuation.yield(element)
+                            }
                         }
                         stopHandler = {
                             continuation.finish()
@@ -215,7 +237,11 @@ struct MessageCodec {
     }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 extension SharePlayMockManager {
 
     func sendMessage<Message>(_ value: Message, activityIdentifier: String, sessionId: UUID, participantIds: [String]?) where Message: Codable {

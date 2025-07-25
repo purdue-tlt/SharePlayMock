@@ -8,7 +8,11 @@
 import Foundation
 import GroupActivities
 
-@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 public class ParticipantMock : Hashable, Identifiable {
     
     public typealias ID = UUID
@@ -43,6 +47,11 @@ public class ParticipantMock : Hashable, Identifiable {
     }
 }
 
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 extension ParticipantMock {
     static func toRaw(_ participants: Participants) -> GroupActivities.Participants {
         switch participants {
@@ -57,6 +66,11 @@ extension ParticipantMock {
     }
 }
 
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 public enum Participants {
 
     case all

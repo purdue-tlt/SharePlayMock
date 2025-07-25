@@ -8,7 +8,11 @@
 import Foundation
 import Starscream
 
-@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 class WebSocketConnection: WebSocketDelegate {
     
     private var socket: WebSocket
@@ -60,7 +64,11 @@ class WebSocketConnection: WebSocketDelegate {
     }
 }
 
-@available(visionOS 26, iOS 15, macOS 12, tvOS 15, *)
+@available(visionOS 26, *)
+@available(iOS, unavailable)
+@available(watchOS, unavailable)
+@available(tvOS, unavailable)
+@available(macOS, unavailable)
 extension SharePlayMockManager {
     func onReceiveNotification(_ notification: WebSocketMessage) {
         switch notification.type {
