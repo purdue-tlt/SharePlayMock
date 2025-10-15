@@ -14,7 +14,7 @@ import SwiftUI
 @available(watchOS, unavailable)
 @available(tvOS, unavailable)
 @available(macOS, unavailable)
-public class SystemCoordinatorMock {
+public class SystemCoordinatorMock : @unchecked Sendable {
     
     var raw: SystemCoordinator?
     

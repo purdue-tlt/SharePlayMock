@@ -71,7 +71,15 @@ extension ParticipantMock {
 @available(watchOS, unavailable)
 @available(tvOS, unavailable)
 @available(macOS, unavailable)
-public enum Participants {
+public enum Participants : CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .all:
+            return "all"
+        case .only(let set):
+            return "only: \(set)"
+        }
+    }
 
     case all
 
