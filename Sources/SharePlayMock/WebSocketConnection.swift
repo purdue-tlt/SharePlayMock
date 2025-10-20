@@ -119,6 +119,9 @@ extension SharePlayMockManager {
                 let source = notification.source!
                 let messageTypeName = notification.messageTypeName!
                 let messageValue = notification.messageValue!
+				if source == localParticipantId!.uuidString {
+					return
+				}
                 activity.onMessage(id, identifier: notification.identifier!, source: source, messageTypeName: messageTypeName, messageValue: messageValue)
             }
             break
