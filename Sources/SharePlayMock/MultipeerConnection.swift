@@ -65,26 +65,26 @@ class ConnectionHolder : NSObject, MCNearbyServiceBrowserDelegate, MCNearbyServi
             let message = "Hello, World!"
             try session.send(message.data(using: .utf8)!, toPeers: session.connectedPeers, with: .reliable)
         } catch {
-            print("Error sending message: \(error.localizedDescription)")
+            logger.error("Error sending message: \(error.localizedDescription)")
         }
     }
     
     
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
-        print("[Connection] foundPeer \(peerID)")
+        logger.debug("[Connection] foundPeer \(peerID)")
         peers.insert(peerID)
-        print("[Connection] total peers: \(peers.count)")
+        logger.debug("[Connection] total peers: \(self.peers.count)")
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        print("[Connection] lostPeer \(peerID)")
+        logger.debug("[Connection] lostPeer \(peerID)")
         peers.remove(peerID)
-        print("[Connection] total peers: \(peers.count)")
+        logger.debug("[Connection] total peers: \(self.peers.count)")
     }
     
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         if let invitationContext = ConnectionContext.decode(context) {
-            print("[Connection] receive invitation from \(peerID) with context \(invitationContext)")
+            logger.debug("[Connection] receive invitation from \(peerID) with context \(invitationContext)")
             self.delegate?.session(detected: invitationContext)
             
             self.invitationContext = invitationContext
@@ -95,14 +95,14 @@ class ConnectionHolder : NSObject, MCNearbyServiceBrowserDelegate, MCNearbyServi
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case .connected:
-            print("[Connection] Connected: \(peerID.displayName)")
+            logger.debug("[Connection] Connected: \(peerID.displayName)")
             self.send()
             break
         case .connecting:
-            print("[Connection] Connecting: \(peerID.displayName)")
+            logger.debug("[Connection] Connecting: \(peerID.displayName)")
             break
         case .notConnected:
-            print("[Connection] Not Connected: \(peerID.displayName)")
+            logger.debug("[Connection] Not Connected: \(peerID.displayName)")
             break
         @unknown default:
             fatalError("[Connection] Unknown state received: \(state)")
@@ -111,19 +111,19 @@ class ConnectionHolder : NSObject, MCNearbyServiceBrowserDelegate, MCNearbyServi
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        print("[Connection] session didReceive data from \(peerID.displayName)")
+        logger.debug("[Connection] session didReceive data from \(peerID.displayName)")
     }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
-        print("[Connection] session didReceive stream")
+        logger.debug("[Connection] session didReceive stream")
     }
     
     func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
-        print("[Connection] session didStartReceivingResourceWithName")
+        logger.debug("[Connection] session didStartReceivingResourceWithName")
     }
     
     func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: (any Error)?) {
-        print("[Connection] session didStartReceivingResourceWithName at localURL")
+        logger.debug("[Connection] session didStartReceivingResourceWithName at localURL")
     }
 }
 
@@ -131,7 +131,7 @@ protocol ConnectionDelegate {
     func session(detected: ConnectionContext);
 }
 
-struct ConnectionContext: Codable {
+struct ConnectionContext: Codable, CustomStringConvertible {
     let sessionId: UUID
     let activityIdentifier: String
     let activityData: String
@@ -141,7 +141,7 @@ struct ConnectionContext: Codable {
             let encoder = JSONEncoder()
             return try encoder.encode(context)
         } catch {
-            print("Failed to encode message: \(error.localizedDescription)")
+            logger.error("Failed to encode message: \(error.localizedDescription)")
             return nil
         }
     }
@@ -152,9 +152,13 @@ struct ConnectionContext: Codable {
                 let decoder = JSONDecoder()
                 return try decoder.decode(ConnectionContext.self, from: data)
             } catch {
-                print("Failed to decode message: \(error.localizedDescription)")
+                logger.error("Failed to decode message: \(error.localizedDescription)")
             }
         }
         return nil
+    }
+    
+    var description: String {
+        "ConnectionContext(sessionId = \(sessionId), activityIdentifier = \(activityIdentifier), activityData = \(activityData))"
     }
 }

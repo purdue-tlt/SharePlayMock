@@ -215,7 +215,7 @@ struct MessageCodec {
                 return jsonString
             }
         } catch {
-            print("Failed to encode JSON: \(error.localizedDescription)")
+            logger.error("Failed to encode JSON: \(error.localizedDescription)")
         }
         return ""
     }
@@ -227,10 +227,10 @@ struct MessageCodec {
             do {
                 return try decoder.decode(type, from: jsonData)
             } catch {
-                print("Failed to decode JSON: \(error.localizedDescription)")
+                logger.error("Failed to decode JSON: \(error.localizedDescription)")
             }
         } else {
-            print("Failed to convert JSON string to Data.")
+            logger.error("Failed to convert JSON string to Data.")
         }
         return nil
     }

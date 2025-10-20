@@ -65,8 +65,6 @@ public class SharePlayMockManager: ObservableObject, @unchecked Sendable {
     }
 }
 
-struct Logging {
-    static func info(_ s: String) {
-        print("[SharePlayMock] \(s)")
-    }
-}
+import OSLog
+
+let logger = Logger(subsystem: "SharePlayMock", category: "Messaging")

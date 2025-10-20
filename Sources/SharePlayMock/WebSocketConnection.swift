@@ -34,7 +34,7 @@ class WebSocketConnection: WebSocketDelegate {
             do {
                 try await Task.sleep(nanoseconds: 1_00_000_000)
             } catch {
-                print(error)
+                logger.error("\(error)")
             }
         }
     }
@@ -43,7 +43,7 @@ class WebSocketConnection: WebSocketDelegate {
         switch event {
         case .connected:
             connected = true
-            Logging.info("websocket connected")
+            logger.info("websocket connected")
             break
         case .text(let string):
             if let notification = WebSocketMessageCodec.decode(string) {
@@ -53,7 +53,7 @@ class WebSocketConnection: WebSocketDelegate {
             }
             break
         default:
-            print("did receive event: \(event)")
+            logger.debug("did receive event: \(event)")
             break
         }
     }
@@ -61,6 +61,36 @@ class WebSocketConnection: WebSocketDelegate {
     func send(_ command: Command) {
         let text = WebSocketMessageCodec.encode(command)
         socket.write(string: text)
+    }
+}
+
+
+extension Starscream.WebSocketEvent: @retroactive CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .connected(_):
+            "connected"
+        case .disconnected(_, _):
+            "disconnected"
+        case .text(_):
+            "text"
+        case .binary(_):
+            "binary"
+        case .pong(_):
+            "pong"
+        case .ping(_):
+            "ping"
+        case .error(_):
+            "error"
+        case .viabilityChanged(_):
+            "viabilityChanged"
+        case .reconnectSuggested(_):
+            "reconnectSuggested"
+        case .cancelled:
+            "cancelled"
+        case .peerClosed:
+            "peerClosed"
+        }
     }
 }
 
@@ -119,14 +149,14 @@ extension SharePlayMockManager {
                 let source = notification.source!
                 let messageTypeName = notification.messageTypeName!
                 let messageValue = notification.messageValue!
-				if source == localParticipantId!.uuidString {
-					return
-				}
+                if source == localParticipantId!.uuidString {
+                    return
+                }
                 activity.onMessage(id, identifier: notification.identifier!, source: source, messageTypeName: messageTypeName, messageValue: messageValue)
             }
             break
         default:
-            Logging.info("Received notification: \(String(describing: notification))")
+            logger.info("Received notification: \(String(describing: notification))")
             break
         }
     }
@@ -150,7 +180,7 @@ struct WebSocketMessageCodec {
                 return jsonString
             }
         } catch {
-            print("Failed to encode JSON: \(error.localizedDescription)")
+            logger.error("Failed to encode JSON: \(error.localizedDescription)")
         }
         return ""
     }
@@ -162,10 +192,10 @@ struct WebSocketMessageCodec {
             do {
                 return try decoder.decode(WebSocketMessage.self, from: jsonData)
             } catch {
-                print("Failed to decode JSON: \(error.localizedDescription)")
+                logger.error("Failed to decode JSON: \(error.localizedDescription)")
             }
         } else {
-            print("Failed to convert JSON string to Data.")
+            logger.error("Failed to convert JSON string to Data.")
         }
         return nil
     }

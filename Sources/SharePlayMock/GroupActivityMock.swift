@@ -149,7 +149,7 @@ extension SharePlayMockManager {
     func register(_ activity: any GroupActivityMock) {
         let identifier = type(of: activity.groupActivity).activityIdentifier
         groupActivities[identifier] = activity
-        Logging.info("register MockGroupActivity: \(type(of: activity))")
+        logger.info("register MockGroupActivity: \(type(of: activity))")
     }
 }
 
@@ -168,23 +168,22 @@ struct ActivityCodec {
                 return jsonString
             }
         } catch {
-            print("Failed to encode JSON: \(error.localizedDescription)")
+            logger.error("Failed to encode JSON: \(error.localizedDescription)")
         }
         return ""
     }
     
     static func decode<T: GroupActivityMock>(_ jsonString: String, type: T.Type) -> T? {
-        print(jsonString)
         if let jsonData = jsonString.data(using: .utf8) {
             let decoder = JSONDecoder()
             
             do {
                 return try decoder.decode(type, from: jsonData)
             } catch {
-                print("Failed to decode JSON: \(error.localizedDescription)")
+                logger.error("Failed to decode JSON: \(error.localizedDescription)")
             }
         } else {
-            print("Failed to convert JSON string to Data.")
+            logger.error("Failed to convert JSON string to Data.")
         }
         return nil
     }
