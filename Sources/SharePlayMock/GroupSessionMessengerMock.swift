@@ -221,7 +221,6 @@ struct MessageCodec {
     }
     
     static func decode<Message: Codable>(_ jsonString: String, type: Message.Type) -> Message? {
-        print(jsonString)
         if let jsonData = jsonString.data(using: .utf8) {
             let decoder = JSONDecoder()
             
