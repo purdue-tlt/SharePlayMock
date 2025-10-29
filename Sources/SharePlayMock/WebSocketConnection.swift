@@ -114,8 +114,8 @@ extension SharePlayMockManager {
                     register(activity)
                 
                     let id = UUID(uuidString: notification.sessionId!)!
-					let initiatingParticipantId = UUID(uuidString: notification.initiatingParticipantId!)!
-					let isLocallyInitiated = localParticipantId == initiatingParticipantId
+//					let initiatingParticipantId = UUID(uuidString: notification.initiatingParticipantId)
+					let isLocallyInitiated = false // localParticipantId == initiatingParticipantId
                     activity.onSessionDetected(id, isLocallyInitiated)
                 }
             }
