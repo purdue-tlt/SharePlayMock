@@ -56,6 +56,18 @@ final public class GroupSessionMock<M: GroupActivityMock> : ObservableObject, @u
             }
         }
     }
+	
+	private var isLocallyInitiatedMock: Bool = false
+	final public var isLocallyInitiated: Bool {
+		get {
+			if SharePlayMockManager.useMock() != nil {
+				return isLocallyInitiatedMock
+			}
+			else {
+				return groupSession!.isLocallyInitiated
+			}
+		}
+	}
     
     init(session: GroupSession<ActivityType>) {
         self.activity = session.activity
@@ -75,11 +87,12 @@ final public class GroupSessionMock<M: GroupActivityMock> : ObservableObject, @u
             }
     }
     
-    init(mockActivity: M, sessionId: UUID) {
+	init(mockActivity: M, sessionId: UUID, isLocallyInitiated: Bool) {
         self.activity = mockActivity.groupActivity
         self.id = sessionId
         self.state = .waiting
         self.activeParticipants = .init()
+		self.isLocallyInitiatedMock = isLocallyInitiated
     }
     
     final public func join() {

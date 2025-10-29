@@ -114,7 +114,9 @@ extension SharePlayMockManager {
                     register(activity)
                 
                     let id = UUID(uuidString: notification.sessionId!)!
-                    activity.onSessionDetected(id)
+					let initiatingParticipantId = UUID(uuidString: notification.initiatingParticipantId!)!
+					let isLocallyInitiated = localParticipantId == initiatingParticipantId
+                    activity.onSessionDetected(id, isLocallyInitiated)
                 }
             }
             break
@@ -205,14 +207,15 @@ struct Command: Codable {
     var action: String
     var identifier: String?
     var activityData: String?
+	var initiatingParticipantId: String?
     var sessionId: String?
     var source: String?
     var messageTypeName: String?
     var messageValue: String?
     var participantIds: [String]?
     
-    static func activate(identifier: String, activityData: String) -> Command {
-        return Command(action: "activate", identifier: identifier, activityData: activityData)
+	static func activate(identifier: String, activityData: String, initiatingParticipantId: String) -> Command {
+		return Command(action: "activate", identifier: identifier, activityData: activityData, initiatingParticipantId: initiatingParticipantId)
     }
     
     static func querySession(identifier: String, sessionId: String?) -> Command {
@@ -241,6 +244,7 @@ struct WebSocketMessage: Codable {
     var type: String
     var identifier: String?
     var activityData: String?
+	var initiatingParticipantId: String?
     var sessionId: String?
     var participantId: String?
     var source: String?
