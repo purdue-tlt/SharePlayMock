@@ -212,8 +212,8 @@ extension GroupSessionMock {
 }
 
 enum SessionError: Error {
-    case leave(String)
-    case end(String)
+    case left
+    case unknown
 }
 
 @available(visionOS 26, *)

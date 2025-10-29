@@ -89,14 +89,14 @@ extension GroupActivityMock {
     
     func onLeaveSession(_ sessionId: UUID) {
         if Self.sessions().current?.id == sessionId {
-            Self.sessions().current?.state = .invalidated(reason: SessionError.leave("leave"))
+            Self.sessions().current?.state = .invalidated(reason: SessionError.left)
             Self.sessions().clear()
         }
     }
     
     func onEndSession(_ sessionId: UUID) {
         if Self.sessions().current?.id == sessionId {
-            Self.sessions().current?.state = .invalidated(reason: SessionError.end("end"))
+            Self.sessions().current?.state = .invalidated(reason: SessionError.unknown)
             Self.sessions().clear()
         }
     }
