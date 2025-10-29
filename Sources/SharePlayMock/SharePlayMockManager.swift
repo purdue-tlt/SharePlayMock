@@ -25,6 +25,7 @@ public class SharePlayMockManager: ObservableObject, @unchecked Sendable {
     var groupActivities: [String : any GroupActivityMock] = [:]
     var groupActivityTypes: [String : any GroupActivityMock.Type] = [:]
     var groupSessions: [String : Any] = [:]
+    var isInitiatingGroupSession: Bool = false
     
     var webSocket: WebSocketConnection?
     
