@@ -72,12 +72,12 @@ extension GroupActivityMock {
 @available(tvOS, unavailable)
 @available(macOS, unavailable)
 extension GroupActivityMock {
-    func onSessionDetected(_ sessionId: UUID) {
+    func onSessionDetected(_ sessionId: UUID, _ isLocallyInitiated: Bool) {
         if Self.sessions().current?.id == sessionId {
             return
         }
         
-        let session = GroupSessionMock<Self>(mockActivity: self, sessionId: sessionId)
+        let session = GroupSessionMock<Self>(mockActivity: self, sessionId: sessionId, isLocallyInitiated: isLocallyInitiated)
         Self.sessions().add(session)
     }
     
@@ -126,6 +126,7 @@ extension SharePlayMockManager {
     func activate<T: GroupActivityMock>(activity: T) {
         let identifier = T.ActivityType.activityIdentifier
         let data = ActivityCodec.encode(activity)
+        isInitiatingGroupSession = true
         
         if useMultipeerConnectivity {
 //            connection.startSession(activityIdentifier: identifier, activityData: data)
